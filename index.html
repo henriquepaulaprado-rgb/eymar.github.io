@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modo Carreira: Do Terrão ao Topo do Mundo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Teko:wght@500;700&family=Inter:wght@400;600;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .font-teko { font-family: 'Teko', sans-serif; }
+    .stadium-bg {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(6, 78, 59, 0.9)), 
+                  url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body class="stadium-bg min-h-screen text-white flex flex-col justify-between p-4 md:p-8">
+
+  <!-- HEADER / STATS DO JOGADOR -->
+  <header class="max-w-5xl mx-auto w-full bg-slate-900/80 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-4 shadow-2xl mb-6">
+    <div class="flex flex-wrap justify-between items-center gap-4">
+      <!-- PERFIL -->
+      <div class="flex items-center gap-3">
+        <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center font-teko text-3xl font-bold border-2 border-white shadow-lg shadow-emerald-500/50" id="player-ovr">
+          65
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-emerald-400" id="player-name">Seu Jogador</h1>
+          <p class="text-xs text-slate-300 font-semibold uppercase tracking-wider flex items-center gap-2">
+            Clube Atual: <span id="current-club" class="text-yellow-400 font-bold">Coritiba</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- PAINEL DE ESTATÍSTICAS -->
+      <div class="grid grid-cols-4 gap-2 md:gap-6 text-center">
+        <div class="bg-slate-800/60 p-2 rounded-lg border border-slate-700">
+          <span class="block text-xs text-slate-400 uppercase">Gols</span>
+          <span class="text-xl md:text-2xl font-bold text-emerald-400 font-teko" id="stat-goals">0</span>
+        </div>
+        <div class="bg-slate-800/60 p-2 rounded-lg border border-slate-700">
+          <span class="block text-xs text-slate-400 uppercase">Assist.</span>
+          <span class="text-xl md:text-2xl font-bold text-blue-400 font-teko" id="stat-assists">0</span>
+        </div>
+        <div class="bg-slate-800/60 p-2 rounded-lg border border-slate-700">
+          <span class="block text-xs text-slate-400 uppercase">Torcida</span>
+          <span class="text-xl md:text-2xl font-bold text-yellow-400 font-teko" id="stat-fans">50%</span>
+        </div>
+        <div class="bg-slate-800/60 p-2 rounded-lg border border-slate-700">
+          <span class="block text-xs text-slate-400 uppercase">Cartões</span>
+          <div class="flex justify-center items-center gap-2 mt-1">
+            <span class="bg-yellow-500 text-slate-900 font-bold text-xs px-1.5 rounded" id="stat-yellows">0</span>
+            <span class="bg-red-600 text-white font-bold text-xs px-1.5 rounded" id="stat-reds">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ÁREA PRINCIPAL DO JOGO -->
+  <main class="max-w-3xl mx-auto w-full bg-slate-900/90 border border-slate-700 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+    
+    <!-- BARRA DE PROGRESSO DE CARREIRA -->
+    <div class="mb-6">
+      <div class="flex justify-between text-xs text-slate-400 mb-1">
+        <span>Progresso da Carreira</span>
+        <span id="question-number">Jogo 1 de 50</span>
+      </div>
+      <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+        <div id="progress-bar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 2%"></div>
+      </div>
+    </div>
+
+    <!-- TELA DE PERGUNTA -->
+    <div id="quiz-screen">
+      <div class="mb-4 inline-block px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-full text-xs font-semibold text-emerald-300" id="question-category">
+        Lance de Jogo
+      </div>
+      <h2 class="text-lg md:text-xl font-semibold text-slate-100 mb-6" id="question-text">
+        Carregando partida...
+      </h2>
+
+      <!-- OPÇÕES DE RESPOSTA -->
+      <div class="grid grid-cols-1 gap-3 mb-6" id="options-container">
+        <!-- Gerado via JS -->
+      </div>
+
+      <!-- FEEDBACK DA JOGADA -->
+      <div id="feedback" class="hidden p-4 rounded-xl mb-4 text-center font-semibold text-sm"></div>
+    </div>
+
+    <!-- TELA FINAL DE APOSENTADORIA -->
+    <div id="end-screen" class="hidden text-center py-8">
+      <h2 class="text-4xl font-bold font-teko text-yellow-400 mb-2">FIM DE CARREIRA!</h2>
+      <p class="text-slate-300 mb-6">Você pendurou as chuteiras. Confira o resumo do seu legado:</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+          <span class="block text-xs text-slate-400">OVERALL FINAL</span>
+          <span class="text-3xl font-bold text-emerald-400 font-teko" id="final-ovr">65</span>
+        </div>
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+          <span class="block text-xs text-slate-400">TOTAL DE GOLS</span>
+          <span class="text-3xl font-bold text-yellow-400 font-teko" id="final-goals">0</span>
+        </div>
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+          <span class="block text-xs text-slate-400">ASSISTÊNCIAS</span>
+          <span class="text-3xl font-bold text-blue-400 font-teko" id="final-assists">0</span>
+        </div>
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+          <span class="block text-xs text-slate-400">TIME FINAL</span>
+          <span class="text-lg font-bold text-white font-teko mt-1 block" id="final-club">Coritiba</span>
+        </div>
+      </div>
+
+      <button onclick="location.reload()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 px-8 rounded-xl transition duration-200">
+        JOGAR NOVAMENTE
+      </button>
+    </div>
+  </main>
+
+  <footer class="text-center text-xs text-slate-500 mt-6">
+    Modo Carreira Quiz Interativo • 50 Rodadas Finais
+  </footer>
+
+  <script>
+    // BASE DE DADOS DAS 50 PERGUNTAS SOBRE OS 10 TIMES
+    const questions = [
+      // FASE 1: BASE (Coritiba & Athletico)
+      { club: "Coritiba", cat: "Artilharia", q: "Quem é o maior artilheiro da história do Coritiba com 202 gols?", opts: ["Duílio", "Keirrison", "Alex", "Rafinha"], ans: 0 },
+      { club: "Athletico-PR", cat: "Títulos", q: "Em qual ano o Athletico Paranaense conquistou o título da Sul-Americana pela primeira vez?", opts: ["2018", "2021", "2001", "2019"], ans: 0 },
+      { club: "Coritiba", cat: "Lances de Jogo", q: "Em 2011, o Coritiba conquistou um recorde mundial de vitórias consecutivas. Quantas foram?", opts: ["24", "18", "12", "30"], ans: 0 },
+      { club: "Athletico-PR", cat: "Transferências", q: "Qual atacante revelado no Athletico foi vendido ao Barcelona em uma negociação histórica recente?", opts: ["Vitor Roque", "Renan Lodi", "Bruno Guimarães", "Khelven"], ans: 0 },
+      { club: "Coritiba", cat: "Disciplinar", q: "Qual ídolo do Coritiba era famoso pelo estilo clássico de meia-esquerda com passes perfeitos sem tomar muitos cartões?", opts: ["Alex", "Mozart", "Tcheco", "Aristizábal"], ans: 0 },
+      
+      // FASE 2: NACIONAL (Flamengo & Palmeiras)
+      { club: "Flamengo", cat: "Gols na Carreira", q: "Quem é o maior artilheiro da história do Flamengo com 509 gols anotados?", opts: ["Zico", "Gabigol", "Zizinho", "Adriano Imperador"], ans: 0 },
+      { club: "Palmeiras", cat: "Títulos", q: "Qual técnico comandou o Palmeiras nas conquistas das Libertadores de 2020 e 2021?", opts: ["Abel Ferreira", "Luiz Felipe Scolari", "Vanderlei Luxemburgo", "Cuca"], ans: 0 },
+      { club: "Flamengo", cat: "Lances de Jogo", q: "Em 2019, Gabigol marcou 2 gols no final da Libertadores contra qual adversário?", opts: ["River Plate", "Boca Juniors", "Gremio", "Palmeiras"], ans: 0 },
+      { club: "Palmeiras", cat: "Gols", q: "Quem é o maior artilheiro do Palmeiras na história da Copa Libertadores?", opts: ["Rony", "Alex", "Dudu", "César Maluco"], ans: 0 },
+      { club: "Flamengo", cat: "Transferências", q: "Qual joia da base do Flamengo foi transferida diretamente para o Real Madrid em 2018?", opts: ["Vinícius Júnior", "Lucas Paquetá", "Reinier", "Gerson"], ans: 0 },
+
+      // FASE 3: AMÉRICA DO SUL (Boca Juniors & River Plate)
+      { club: "Boca Juniors", cat: "Gols na Carreira", q: "Quem é o maior artilheiro da história do Boca Juniors com 236 gols?", opts: ["Martin Palermo", "Juan Román Riquelme", "Carlos Tevez", "Diego Maradona"], ans: 0 },
+      { club: "River Plate", cat: "Títulos", q: "Em qual estádio o River Plate venceu o Boca Juniors na final histórica da Libertadores 2018?", opts: ["Santiago Bernabéu", "Monumental de Nuñez", "La Bombonera", "Maracanã"], ans: 0 },
+      { club: "Boca Juniors", cat: "Disciplinar", q: "Qual zagueiro histórico do Boca Juniors era famoso por sua raça extrema e cartões amarelos nos anos 2000?", opts: ["Rolando Schiavi", "Jorge Bermúdez", "Marcos Rojo", "Claudio Morel"], ans: 0 },
+      { club: "River Plate", cat: "Gols", q: "Quem é o maior artilheiro da Era Marcelo Gallardo no River Plate?", opts: ["Rafael Santos Borré", "Julian Álvarez", "Lucas Pratto", "Gonzalo Martínez"], ans: 0 },
+      { club: "Boca Juniors", cat: "Lances de Jogo", q: "Qual camisa 10 liderou o Boca Juniors ao título da Libertadores de 2007 com atuações brilhantes?", opts: ["Juan Román Riquelme", "Carlos Tevez", "Ariel Ortega", "Pablo Aimar"], ans: 0 },
+
+      // FASE 4: EUROPA (Chelsea & Liverpool)
+      { club: "Chelsea", cat: "Gols na Carreira", q: "Quem é o maior artilheiro da história do Chelsea (211 gols), jogando como meio-campista?", opts: ["Frank Lampard", "Didier Drogba", "Eden Hazard", "Gianfranco Zola"], ans: 0 },
+      { club: "Liverpool", cat: "Lances de Jogo", q: "O 'Milagre de Istambul' aconteceu na final da Champions 2005. Qual time o Liverpool venceu nos pênaltis?", opts: ["AC Milan", "Real Madrid", "Juventus", "Bayern de Munique"], ans: 0 },
+      { club: "Chelsea", cat: "Títulos", q: "Qual atacante marcou o gol do título mundial do Chelsea contra o Palmeiras em 2021?", opts: ["Kai Havertz", "Romelu Lukaku", "Timo Werner", "Mason Mount"], ans: 0 },
+      { club: "Liverpool", cat: "Gols", q: "Quem detém o recorde de mais gols marcados numa única temporada da Premier League de 38 jogos pelo Liverpool?", opts: ["Mohamed Salah", "Fernando Torres", "Luis Suárez", "Steven Gerrard"], ans: 0 },
+      { club: "Chelsea", cat: "Transferências", q: "Qual meio-campista campeão do mundo pela Argentina tornou-se a compra mais cara do Chelsea em 2023?", opts: ["Enzo Fernández", "Alexis Mac Allister", "Rodrigo De Paul", "Julian Álvarez"], ans: 0 },
+
+      // FASE 5: ELITE MUNDIAL (Real Madrid & Barcelona)
+      { club: "Real Madrid", cat: "Gols na Carreira", q: "Quem é o maior artilheiro de toda a história do Real Madrid com 450 gols?", opts: ["Cristiano Ronaldo", "Raúl González", "Karim Benzema", "Alfredo Di Stéfano"], ans: 0 },
+      { club: "Barcelona", cat: "Gols na Carreira", q: "Quantos gols oficializados Lionel Messi marcou na sua carreira pelo Barcelona?", opts: ["672", "500", "750", "600"], ans: 0 },
+      { club: "Real Madrid", cat: "Títulos", q: "Quantas taças da UEFA Champions League o Real Madrid possui em sua galeria?", opts: ["15", "10", "12", "14"], ans: 0 },
+      { club: "Barcelona", cat: "Lances de Jogo", q: "Qual foi o placar da virada histórica ('La Remontada') do Barcelona sobre o PSG na Champions 2017?", opts: ["6 x 1", "5 x 0", "4 x 0", "6 x 2"], ans: 0 },
+      { club: "Real Madrid", cat: "Transferências", q: "Qual astro francês assinou com o Real Madrid sem custos de transferência em 2024?", opts: ["Kylian Mbappé", "Eduardo Camavinga", "Aurélien Tchouaméni", "Antoine Griezmann"], ans: 0 },
+
+      // ADICIONAIS PARA FECHAR AS 50 RODADAS (GERAL)
+      { club: "Palmeiras", cat: "Gols", q: "Qual zagueiro artilheiro ficou famoso por gols de cabeça decisivos no Palmeiras recente?", opts: ["Gustavo Gómez", "Murilo", "Luan", "Vitor Hugo"], ans: 0 },
+      { club: "Flamengo", cat: "Disciplinar", q: "Qual volante raçudo marcou época no Flamengo com a frase 'tropa do broxador' e forte marcação?", opts: ["João Gomes", "Cuéllar", "Erick Pulgar", "Willian Arão"], ans: 0 },
+      { club: "River Plate", cat: "Transferências", q: "Qual jovem promessa do River Plate foi comprada pelo Manchester City e brilhou na Copa do Mundo 2022?", opts: ["Julián Álvarez", "Enzo Fernández", "Exequiel Palacios", "Claudio Echeverri"], ans: 0 },
+      { club: "Liverpool", cat: "Gols", q: "Qual atacante brasileiro fez o famoso trio 'NSF' com Nunez, Salah e Firmino?", opts: ["Roberto Firmino", "Philippe Coutinho", "Sadio Mané", "Richarlison"], ans: 0 },
+      { club: "Barcelona", cat: "Disciplinar", q: "Qual zagueiro lendário do Barcelona era conhecido pelo espírito de liderança e raça pura na defesa?", opts: ["Carles Puyol", "Gerard Piqué", "Javier Mascherano", "Ronald Araújo"], ans: 0 },
+
+      // Repetição e aprofundamento tático/estatístico
+      { club: "Athletico-PR", cat: "Gols", q: "Quem foi o artilheiro do Athletico na conquista da Copa do Brasil 2019?", opts: ["Marco Ruben", "Nikão", "Rony", "Cirino"], ans: 0 },
+      { club: "Coritiba", cat: "Títulos", q: "Em qual ano o Coritiba conquistou seu título do Campeonato Brasileiro Série A?", opts: ["1985", "1979", "1989", "1995"], ans: 0 },
+      { club: "Boca Juniors", cat: "Estádio", q: "Qual o apelido famoso do estádio Alberto J. Armando, casa do Boca Juniors?", opts: ["La Bombonera", "El Monumental", "Cilindro", "El Nuevo Gasómetro"], ans: 0 },
+      { club: "Real Madrid", cat: "Gols", q: "Quem marcou o gol do título do Real Madrid na final da Champions League 2021/22 contra o Liverpool?", opts: ["Vinícius Júnior", "Benzema", "Rodrygo", "Modric"], ans: 0 },
+      { club: "Chelsea", cat: "Títulos", q: "Em qual ano o Chelsea conquistou sua primeira UEFA Champions League?", opts: ["2012", "2021", "2008", "2015"], ans: 0 },
+      
+      { club: "Flamengo", cat: "Títulos", q: "Quantas Libertadores o Clube de Regatas do Flamengo possui até hoje?", opts: ["3", "2", "4", "1"], ans: 0 },
+      { club: "Palmeiras", cat: "Gols", q: "Quem é o jovem fenômeno vendido pelo Palmeiras ao Real Madrid que estreou no profissional aos 16 anos?", opts: ["Endrick", "Estêvão", "Luis Guilherme", "Gabriel Jesus"], ans: 0 },
+      { club: "River Plate", cat: "Títulos", q: "Quantas Copa Libertadores possui o River Plate?", opts: ["4", "3", "5", "2"], ans: 0 },
+      { club: "Liverpool", cat: "Treinador", q: "Qual técnico alemão encerrou o jejum de 30 anos do Liverpool sem vencer a Premier League?", opts: ["Jürgen Klopp", "Rafa Benítez", "Thomas Tuchel", "Brendan Rodgers"], ans: 0 },
+      { club: "Barcelona", cat: "Títulos", q: "Em qual ano o Barcelona conquistou o lendário 'Sextete' (6 títulos no mesmo ano)?", opts: ["2009", "2015", "2011", "2006"], ans: 0 },
+
+      { club: "Athletico-PR", cat: "Lances", q: "Qual meia marcou o gol do título da Sul-Americana 2021 pelo Furacão contra o Bragantino?", opts: ["Nikão", "David Terans", "Kayzer", "Abner"], ans: 0 },
+      { club: "Coritiba", cat: "Gols", q: "Qual atacante marcou época no Coxa em 2012 com dezenas de gols de falta e cabeceio?", opts: ["Keirrison", "Deivid", "Anderson Aquino", "Lincoln"], ans: 1 },
+      { club: "Boca Juniors", cat: "Gols", q: "Qual atacante uruguaio veterano assumiu a camisa 10 do Boca Juniors em 2023?", opts: ["Edinson Cavani", "Luis Suárez", "Diego Forlán", "Darwin Núñez"], ans: 0 },
+      { club: "Real Madrid", cat: "Gols", q: "Quem é conhecido como 'Mr. Champions' por ser o maior artilheiro do torneio pelo Real Madrid?", opts: ["Cristiano Ronaldo", "Raúl", "Benzema", "Guti"], ans: 0 },
+      { club: "Chelsea", cat: "Gols", q: "Qual marfinense lendário é o maior artilheiro estrangeiro do Chelsea?", opts: ["Didier Drogba", "Salomon Kalou", "Michael Essien", "Samuel Eto'o"], ans: 0 },
+
+      { club: "Flamengo", cat: "Gols", q: "Qual jogador marcou o gol de tri do Brasileirão do Flamengo em 2009 de cabeça?", opts: ["Ronaldo Angelim", "Adriano Imperador", "Petkovic", "Léo Moura"], ans: 0 },
+      { club: "Palmeiras", cat: "Títulos", q: "O Palmeiras venceu a Copa do Brasil de 2015 nos pênaltis contra qual rival?", opts: ["Santos", "Corinthians", "São Paulo", "Flamengo"], ans: 0 },
+      { club: "River Plate", cat: "Gols", q: "Qual meia talentoso marcou o terceiro gol do River Plate sobre o Boca no Bernabéu com o gol livre?", opts: ["Pity Martínez", "Juan Quintero", "Nacho Fernández", "Enzo Pérez"], ans: 0 },
+      { club: "Liverpool", cat: "Gols", q: "Qual lendário camisa 8 e capitão do Liverpool marcou mais de 180 gols pelo clube?", opts: ["Steven Gerrard", "Xabi Alonso", "Jordan Henderson", "Robbie Fowler"], ans: 0 },
+      { club: "Barcelona", cat: "Títulos", q: "Qual trio de ataque lendário do Barcelona marcou mais de 100 gols juntos na temporada 2014/15?", opts: ["MSN (Messi, Suárez, Neymar)", "BBC", "Rivaldo, Ronaldinho, Ronaldo", "MVP"], ans: 0 }
+    ];
+
+    // ESTÁGIOS DA CARREIRA E CLUBES
+    const careerTiers = [
+      { minOvr: 0, club: "Coritiba", color: "text-emerald-400" },
+      { minOvr: 68, club: "Athletico-PR", color: "text-red-500" },
+      { minOvr: 73, club: "Palmeiras", color: "text-green-500" },
+      { minOvr: 77, club: "Flamengo", color: "text-red-600" },
+      { minOvr: 81, club: "Boca Juniors", color: "text-yellow-400" },
+      { minOvr: 84, club: "River Plate", color: "text-red-400" },
+      { minOvr: 87, club: "Chelsea", color: "text-blue-500" },
+      { minOvr: 90, club: "Liverpool", color: "text-red-500" },
+      { minOvr: 93, club: "Barcelona", color: "text-blue-400" },
+      { minOvr: 96, club: "Real Madrid", color: "text-purple-400" }
+    ];
+
+    // ESTADO DO JOGADOR
+    let currentQ = 0;
+    let ovr = 65;
+    let goals = 0;
+    let assists = 0;
+    let fans = 50;
+    let yellows = 0;
+    let reds = 0;
+    let currentClub = "Coritiba";
+
+    // INICIALIZAÇÃO
+    function loadQuestion() {
+      if (currentQ >= questions.length) {
+        endCareer();
+        return;
+      }
+
+      const q = questions[currentQ];
+      document.getElementById("question-number").innerText = `Jogo ${currentQ + 1} de ${questions.length}`;
+      document.getElementById("progress-bar").style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+      document.getElementById("question-category").innerText = `${q.club} • ${q.cat}`;
+      document.getElementById("question-text").innerText = q.q;
+
+      const optsContainer = document.getElementById("options-container");
+      optsContainer.innerHTML = "";
+
+      q.opts.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "w-full text-left bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 p-4 rounded-xl transition duration-150 font-medium text-slate-200 flex items-center justify-between group";
+        btn.innerHTML = `
+          <span>${opt}</span>
+          <span class="w-6 h-6 rounded-full bg-slate-700 group-hover:bg-emerald-500 group-hover:text-slate-900 flex items-center justify-center text-xs font-bold transition">→</span>
+        `;
+        btn.onclick = () => checkAnswer(idx);
+        optsContainer.appendChild(btn);
+      });
+
+      document.getElementById("feedback").classList.add("hidden");
+    }
+
+    // VERIFICAÇÃO E ATUALIZAÇÃO DA CARREIRA
+    function checkAnswer(selectedIdx) {
+      const q = questions[currentQ];
+      const isCorrect = selectedIdx === q.ans;
+      const feedbackEl = document.getElementById("feedback");
+
+      // Desabilitar botões
+      const btns = document.querySelectorAll("#options-container button");
+      btns.forEach(b => b.disabled = true)
